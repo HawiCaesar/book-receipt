@@ -4,10 +4,16 @@ import "./index.css";
 import "./tailwind.output.css";
 import * as serviceWorker from "./serviceWorker";
 import Routes from "./Routes";
+import { BookStoreAPI } from "./api/BookStoreAPI";
+import { Provider } from "mobx-react";
+
+const store = new BookStoreAPI();
 
 ReactDOM.render(
   <React.StrictMode>
-    <Routes />
+    <Provider store={store}>
+      <Routes />
+    </Provider>
   </React.StrictMode>,
   document.getElementById("root")
 );
