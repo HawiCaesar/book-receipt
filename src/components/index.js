@@ -1,5 +1,6 @@
-import { Books } from "./Books/View";
+import { Books } from "./Books";
 import { Customers } from "./Customers";
 import { Rentals } from "./Rentals";
+import { NavBar } from "./NavBar";
 
-export { Books, Customers, Rentals };
+export { Books, Customers, Rentals, NavBar };

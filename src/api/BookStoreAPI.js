@@ -1,17 +1,16 @@
 import axios from "axios";
 import { observable, action } from "mobx";
 
-const fetchBooks = () => {
+const fetchResource = (resouceString) => {
   return axios
     .get(
-      "https://my-json-server.typicode.com/HawiCaesar/jsonplaceholders-demo/books"
+      `https://my-json-server.typicode.com/HawiCaesar/jsonplaceholders-demo/${resouceString}`
     )
     .then((response) => {
-      console.log(response);
-      return response;
+      return response.data;
     })
     .catch((error) => {
-      console.log("Error Fetching api data", error);
+      throw error;
     });
 };
 
@@ -20,9 +19,28 @@ export class BookStoreAPI {
   @observable customers = [];
   @observable rentals = [];
   @observable loading = true;
+  @observable hasError = false;
+  @observable error = {};
 
-  @action loadBooks = async () => {
-    this.books = await fetchBooks();
-    this.loading = false;
+  @action loadBooks = async (resource) => {
+    try {
+      this.books = await fetchResource(resource);
+    } catch (error) {
+      this.hasError = true;
+      this.error = error;
+    } finally {
+      this.loading = false;
+    }
+  };
+
+  @action loadCustomers = async (resource) => {
+    try {
+      this.customers = await fetchResource(resource);
+    } catch (error) {
+      this.hasError = true;
+      this.error = error;
+    } finally {
+      this.loading = false;
+    }
   };
 }

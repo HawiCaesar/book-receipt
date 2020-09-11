@@ -1,1 +1,1 @@
-export { Books } from "./View";
+export { Books } from "./connect";
