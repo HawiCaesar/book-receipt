@@ -9,17 +9,19 @@ export default function Routes() {
         <NavBar />
 
         <hr />
-        <Switch>
-          <Route exact path="/">
-            <Books />
-          </Route>
-          <Route path="/customers">
-            <Customers />
-          </Route>
-          <Route path="/rentals">
-            <Rentals />
-          </Route>
-        </Switch>
+        <div className="ml-8">
+          <Switch>
+            <Route exact path="/">
+              <Books />
+            </Route>
+            <Route path="/customers">
+              <Customers />
+            </Route>
+            <Route path="/rentals">
+              <Rentals />
+            </Route>
+          </Switch>
+        </div>
       </div>
     </Router>
   );

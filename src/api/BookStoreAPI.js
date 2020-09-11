@@ -14,6 +14,19 @@ const fetchResource = (resouceString) => {
     });
 };
 
+const postResource = (resouceString, data) => {
+  return axios
+    .post(
+      `https://my-json-server.typicode.com/HawiCaesar/jsonplaceholders-demo/${resouceString}`, data
+    )
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      throw error;
+    });
+};
+
 export class BookStoreAPI {
   @observable books = [];
   @observable customers = [];
@@ -43,4 +56,13 @@ export class BookStoreAPI {
       this.loading = false;
     }
   };
+
+  @action postRentalCharge = async (path, data) => {
+    try {
+      await postResource(path, data);
+    } catch (error) {
+      this.hasError = true;
+      this.error = error;
+    } 
+  }
 }
