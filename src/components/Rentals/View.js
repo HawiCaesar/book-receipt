@@ -18,7 +18,7 @@ class Rentals extends React.Component {
   render() {
     const {
       store: {
-        books: { books, postRentalCharge },
+        books: { books },
       },
     } = this.props;
     return (
@@ -34,6 +34,7 @@ class Rentals extends React.Component {
             const {
               store: {
                 alert: { setAlertDetails, toggleAlert },
+                books: { postRentalCharge },
               },
             } = this.props;
 
@@ -86,7 +87,10 @@ class Rentals extends React.Component {
         >
           {(props) => {
             return (
-              <form className="w-full max-w-lg" onSubmit={props.handleSubmit}>
+              <form
+                className="w-full max-w-lg"
+                onSubmit={props.handleSubmit}
+              >
                 <div className="flex flex-wrap -mx-3 mb-6">
                   <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
                     <label
@@ -107,9 +111,10 @@ class Rentals extends React.Component {
                       onBlur={props.handleBlur}
                       name="name"
                       value={props.values.name}
+                      aria-label="customer-name"
                     />
                     {props.errors.name && (
-                      <p className="text-red-500 text-xs italic">
+                      <p className="text-red-500 text-xs italic" data-testid="error-customer-name">
                         {props.errors.name}
                       </p>
                     )}
@@ -127,6 +132,7 @@ class Rentals extends React.Component {
                       }
                       className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                       id="grid-last-name"
+                      aria-label="number-of-days-renting"
                       type="number"
                       name="noOfDaysToRent"
                       value={props.values.noOfDaysToRent}
@@ -134,7 +140,7 @@ class Rentals extends React.Component {
                       onBlur={props.handleBlur}
                     />
                     {props.errors.noOfDaysToRent && (
-                      <p className="text-red-500 text-xs italic">
+                      <p className="text-red-500 text-xs italic" data-testid="error-day-for-rent">
                         {props.errors.noOfDaysToRent}
                       </p>
                     )}
@@ -165,6 +171,7 @@ class Rentals extends React.Component {
                                       <Field
                                         className="opacity-0 absolute"
                                         name={`booksRented[${index}].id`}
+                                        data-testid={`booksRented-test`}
                                         type="checkbox"
                                         value={book.id}
                                         checked={props.values.booksRented.includes(
@@ -214,6 +221,7 @@ class Rentals extends React.Component {
                     <button
                       className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                       type="submit"
+                      data-testid="submit-rental-charge"
                     >
                       Save
                     </button>
