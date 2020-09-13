@@ -28,9 +28,27 @@ export const View = ({ customers }) => {
                   {customer.booksRented.map((book, index) => {
                     return (
                       <React.Fragment key={`${book.id}-${index}`}>
-                        <p className="pt-2 font-semibold">
-                          {book.title} @ ${book.chargePerDay}
-                        </p>
+                        {book.category === "Regular" ||
+                        book.category === "Novel" ? (
+                          <React.Fragment>
+                            <p className="pt-2 font-semibold">{book.title}</p>
+                            <p className="pt-2 font-semibold">
+                              At least 1 day @ ${book.day1Charge}
+                            </p>
+
+                            <p className="pt-2 font-semibold">
+                              First 2 days @ ${book.day2Charge}
+                            </p>
+
+                            <p className="pt-2 font-semibold">
+                              3 days and over @ ${book.chargePerDay}
+                            </p>
+                          </React.Fragment>
+                        ) : (
+                          <p className="pt-2 font-semibold">
+                            {book.title} @ ${book.chargePerDay}
+                          </p>
+                        )}
                         <hr className="py-2" />
                       </React.Fragment>
                     );

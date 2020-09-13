@@ -14,14 +14,23 @@ const store = {
           { id: 5, title: "Aminata", chargePerDay: 3 },
         ],
         noOfDaysToRent: 5,
-        rentCharged: 20,
+        rentCharged: 22.5,
       },
       {
         id: 2,
         name: "Test customer 2",
-        booksRented: [{ id: 2, title: "Figuring", chargePerDay: 1 }],
+        booksRented: [
+          {
+            id: 2,
+            title: "Figuring",
+            category: "Regular",
+            chargePerDay: 1.5,
+            day1Charge: 2,
+            day2Charge: 1,
+          },
+        ],
         noOfDaysToRent: 2,
-        rentCharged: 2,
+        rentCharged: 3,
       },
     ],
     loading: false,
@@ -40,11 +49,14 @@ describe("Customers View test", () => {
     expect(getByText("Test customer 1")).toBeInTheDocument();
     expect(getByText("Aminata @ $3")).toBeInTheDocument();
     expect(getByText("Animal Farm @ $1.5")).toBeInTheDocument();
-    expect(getByText("$20")).toBeInTheDocument(); // total Rent
+    expect(getByText("$22.5")).toBeInTheDocument(); // total Rent
 
     expect(getByText("Test customer 2")).toBeInTheDocument();
-    expect(getByText("Figuring @ $1")).toBeInTheDocument();
-    expect(getByText("$2")).toBeInTheDocument(); // total rent
+    expect(getByText("Figuring")).toBeInTheDocument();
+    expect(getByText("At least 1 day @ $2")).toBeInTheDocument();
+    expect(getByText("First 2 days @ $1")).toBeInTheDocument();
+    expect(getByText("3 days and over @ $1.5")).toBeInTheDocument();
+    expect(getByText("$3")).toBeInTheDocument(); // total rent
   });
 
   it("should show me the loading text on the customer page", () => {

@@ -12,14 +12,18 @@ const store = {
         author: "Johnathan Cott",
         chargePerDay: 1,
         category: "Novel",
-        chargePerDay: 1.5,
+        chargePerDay: 1,
+        day1Charge: 4.5,
+        day2Charge: 4.5,
       },
       {
         id: 2,
         title: "Figuring",
         author: "Maria Popova",
         category: "Regular",
-        chargePerDay: 1,
+        chargePerDay: 1.5,
+        day1Charge: 2,
+        day2Charge: 1,
       },
     ],
     loading: false,
@@ -35,10 +39,12 @@ describe("Book View test", () => {
     expect(getByText("Books")).toBeInTheDocument();
     expect(getByText("Title")).toBeInTheDocument();
     expect(getByText("Author")).toBeInTheDocument();
-    expect(getByText("Charge Per Day")).toBeInTheDocument();
+    expect(getByText("Charges")).toBeInTheDocument();
 
     expect(getByText("Figuring")).toBeInTheDocument();
-    expect(getByText("$1")).toBeInTheDocument();
+    expect(getByText("At least 1 day @ $2")).toBeInTheDocument();
+    expect(getByText("First 2 days @ $1")).toBeInTheDocument();
+    expect(getByText("3 days and over @ $1.5")).toBeInTheDocument();
     expect(getByText("Maria Popova")).toBeInTheDocument();
   });
 
