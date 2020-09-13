@@ -1,4 +1,5 @@
 import React from "react";
+
 export const View = ({ customers }) => {
   return (
     <React.Fragment>
@@ -9,6 +10,7 @@ export const View = ({ customers }) => {
             <th className="px-4 py-2">Name</th>
             <th className="px-4 py-2">No. of Books Rented</th>
             <th className="px-4 py-2">Days Renting</th>
+            <th className="px-4 py-2">Particulars Per Day</th>
             <th className="px-4 py-2">Total Rent Charged</th>
           </tr>
         </thead>
@@ -21,6 +23,19 @@ export const View = ({ customers }) => {
                   {customer.booksRented.length}
                 </td>
                 <td className="border px-4 py-2">{customer.noOfDaysToRent}</td>
+
+                <td className="border px-4 py-2">
+                  {customer.booksRented.map((book, index) => {
+                    return (
+                      <React.Fragment key={`${book.id}-${index}`}>
+                        <p className="pt-2 font-semibold">
+                          {book.title} @ ${book.chargePerDay}
+                        </p>
+                        <hr className="py-2" />
+                      </React.Fragment>
+                    );
+                  })}
+                </td>
                 <td className="border px-4 py-2">${customer.rentCharged}</td>
               </tr>
             );

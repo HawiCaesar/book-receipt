@@ -20,7 +20,7 @@ class Alert extends React.Component {
         <div
           className={`border border-t-0 border-${color}-400 rounded-b bg-${color}-100 px-4 py-3 text-${color}-700`}
         >
-          <p>{content}</p>
+          {typeof content === "string" ? <p>{content}</p> : content}
         </div>
       </div>
     ) : (
