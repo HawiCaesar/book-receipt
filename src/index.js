@@ -1,14 +1,26 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import "./tailwind.output.css";
+import * as serviceWorker from "./serviceWorker";
+import Routes from "./Routes";
+import { books, alert } from "./stores";
+import { Provider } from "mobx-react";
+import { Alert } from "./components";
+
+const store = {
+  books,
+  alert,
+};
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <Routes />
+      <Alert />
+    </Provider>
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById("root")
 );
 
 // If you want your app to work offline and load faster, you can change
