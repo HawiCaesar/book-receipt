@@ -8,7 +8,9 @@ import { View } from "./View";
 class Customers extends React.Component {
   async componentDidMount() {
     const {
-      store: { loadCustomers },
+      store: {
+        books: { loadCustomers },
+      },
     } = this.props;
 
     await loadCustomers("customers");
@@ -16,7 +18,9 @@ class Customers extends React.Component {
 
   render() {
     const {
-      store: { loading, customers, hasError, error },
+      store: {
+        books: { loading, customers, hasError, error },
+      },
     } = this.props;
 
     if (loading) {

@@ -8,14 +8,18 @@ import { rentalCalculations } from "./rentalCalculations";
 class Rentals extends React.Component {
   async componentDidMount() {
     const {
-      store: { loadBooks },
+      store: {
+        books: { loadBooks },
+      },
     } = this.props;
 
     await loadBooks("books");
   }
   render() {
     const {
-      store: { books, postRentalCharge },
+      store: {
+        books: { books, postRentalCharge },
+      },
     } = this.props;
     return (
       <div>
@@ -26,8 +30,22 @@ class Rentals extends React.Component {
             noOfDaysToRent: 1,
             booksRented: [],
           }}
-          onSubmit={async (values, actions) => {
-            console.log(values, "!!!!!");
+          onSubmit={async (values, { setSubmitting, resetForm }) => {
+            const {
+              store: {
+                alert: { setAlertDetails, toggleAlert },
+              },
+            } = this.props;
+
+            if (!values.booksRented.length) {
+              setAlertDetails(
+                "Please pick an available book",
+                "Error when submitting information",
+                "danger"
+              );
+              toggleAlert(true);
+              return;
+            }
 
             const totalPay = rentalCalculations(
               values.booksRented,
@@ -42,13 +60,27 @@ class Rentals extends React.Component {
             try {
               await postRentalCharge("customers", data);
 
-              //open some modal / alert to show the receipt
+              setAlertDetails(
+                `${values.name}'s rental charge is $${totalPay}`,
+                "Save Successful",
+                "success"
+              );
+              toggleAlert(true);
+
               setTimeout(() => {
-                alert(`${values.name}'s rental charge is ${totalPay}`);
-                actions.setSubmitting(false);
-              }, 1000);
+                resetForm({});
+                toggleAlert(false);
+              }, 5000);
             } catch (error) {
-              console.log(error);
+              setTimeout(() => {
+                console.log(error);
+                setAlertDetails(
+                  error.message,
+                  "Error when submitting information",
+                  "danger"
+                );
+                setSubmitting(false);
+              }, 5000);
             }
           }}
         >
@@ -112,7 +144,7 @@ class Rentals extends React.Component {
                       className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                       htmlFor="grid-last-name"
                     >
-                      Books Renting
+                      Available Books
                     </label>
                     <FieldArray
                       name="booksRented"
@@ -125,14 +157,14 @@ class Rentals extends React.Component {
                             </tr>
                           </thead>
                           <tbody>
-                            {books.map((book) => (
+                            {books.map((book, index) => (
                               <tr key={book.id}>
                                 <td className="border px-4 py-2">
                                   <label className="flex justify-start items-start">
                                     <div className="bg-white border-2 rounded border-gray-400 w-6 h-6 flex flex-shrink-0 justify-center items-center mr-2 focus-within:border-blue-500">
-                                      <input
+                                      <Field
                                         className="opacity-0 absolute"
-                                        name="booksRented"
+                                        name={`booksRented[${index}].id`}
                                         type="checkbox"
                                         value={book.id}
                                         checked={props.values.booksRented.includes(
@@ -170,6 +202,11 @@ class Rentals extends React.Component {
                         </table>
                       )}
                     />
+                    {props.errors.booksRented && (
+                      <p className="text-red-500 text-xs italic">
+                        {props.errors.booksRented}
+                      </p>
+                    )}
                   </div>
                 </div>
                 <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">

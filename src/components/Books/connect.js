@@ -6,18 +6,21 @@ import { View } from "./View";
 @inject("store")
 @observer
 class Books extends React.Component {
-
   async componentDidMount() {
     const {
-      store: { loadBooks },
+      store: {
+        books: { loadBooks },
+      },
     } = this.props;
 
-    await loadBooks('books');
+    await loadBooks("books");
   }
 
   render() {
     const {
-      store: { loading, books, hasError, error },
+      store: {
+        books: { loading, books, hasError, error },
+      },
     } = this.props;
 
     if (loading) {
@@ -28,7 +31,6 @@ class Books extends React.Component {
       return <ErrorComponent error={error} />;
     }
 
-    console.log(books, loading);
     return <View books={books} />;
   }
 }
