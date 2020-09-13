@@ -2,6 +2,7 @@ import React from "react";
 import { Formik, Field, FieldArray } from "formik";
 import { observer, inject } from "mobx-react";
 import { rentalCalculations } from "./rentalCalculations";
+import { Particulars } from "./Particulars";
 
 @inject("store")
 @observer
@@ -34,7 +35,7 @@ class Rentals extends React.Component {
             const {
               store: {
                 alert: { setAlertDetails, toggleAlert },
-                books: { postRentalCharge },
+                books: { books, postRentalCharge },
               },
             } = this.props;
 
@@ -48,21 +49,37 @@ class Rentals extends React.Component {
               return;
             }
 
-            const totalPay = rentalCalculations(
+            const { totalPay, particulars } = rentalCalculations(
               values.booksRented,
-              values.noOfDaysToRent
+              values.noOfDaysToRent,
+              books
             );
+
+            if (totalPay === -1) {
+              setAlertDetails(
+                `Something went wrong`,
+                "Error when calculating rental charge",
+                "danger"
+              );
+              toggleAlert(true);
+            }
 
             const data = {
               rentCharged: totalPay,
-              ...values,
+              booksRented: particulars,
+              noOfDaysToRent: values.noOfDaysToRent,
+              name: values.name,
             };
 
             try {
               await postRentalCharge("customers", data);
 
               setAlertDetails(
-                `${values.name}'s rental charge is $${totalPay}`,
+                <Particulars
+                  totalPay={totalPay}
+                  name={values.name}
+                  booksRented={particulars}
+                />,
                 "Save Successful",
                 "success"
               );
@@ -71,12 +88,12 @@ class Rentals extends React.Component {
               setTimeout(() => {
                 resetForm({});
                 toggleAlert(false);
-              }, 5000);
+              }, 10000);
             } catch (error) {
               setTimeout(() => {
                 console.log(error);
                 setAlertDetails(
-                  error.message,
+                  error.message ? error.message : "Something went wrong",
                   "Error when submitting information",
                   "danger"
                 );
@@ -87,10 +104,7 @@ class Rentals extends React.Component {
         >
           {(props) => {
             return (
-              <form
-                className="w-full max-w-lg"
-                onSubmit={props.handleSubmit}
-              >
+              <form className="w-full max-w-lg" onSubmit={props.handleSubmit}>
                 <div className="flex flex-wrap -mx-3 mb-6">
                   <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
                     <label
@@ -114,7 +128,10 @@ class Rentals extends React.Component {
                       aria-label="customer-name"
                     />
                     {props.errors.name && (
-                      <p className="text-red-500 text-xs italic" data-testid="error-customer-name">
+                      <p
+                        className="text-red-500 text-xs italic"
+                        data-testid="error-customer-name"
+                      >
                         {props.errors.name}
                       </p>
                     )}
@@ -140,7 +157,10 @@ class Rentals extends React.Component {
                       onBlur={props.handleBlur}
                     />
                     {props.errors.noOfDaysToRent && (
-                      <p className="text-red-500 text-xs italic" data-testid="error-day-for-rent">
+                      <p
+                        className="text-red-500 text-xs italic"
+                        data-testid="error-day-for-rent"
+                      >
                         {props.errors.noOfDaysToRent}
                       </p>
                     )}
@@ -159,6 +179,7 @@ class Rentals extends React.Component {
                           <thead>
                             <tr>
                               <th className="px-4 py-2">Title</th>
+                              <th className="px-4 py-2">Category</th>
                               <th className="px-4 py-2">Charge Per Day</th>
                             </tr>
                           </thead>
@@ -201,7 +222,10 @@ class Rentals extends React.Component {
                                   </label>
                                 </td>
                                 <td className="border px-4 py-2">
-                                  {book.chargePerDay}
+                                  {book.category}
+                                </td>
+                                <td className="border px-4 py-2">
+                                  ${book.chargePerDay}
                                 </td>
                               </tr>
                             ))}

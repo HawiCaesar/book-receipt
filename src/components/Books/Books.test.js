@@ -11,11 +11,14 @@ const store = {
         title: "Pipers at the gates dawn",
         author: "Johnathan Cott",
         chargePerDay: 1,
+        category: "Novel",
+        chargePerDay: 1.5,
       },
       {
         id: 2,
         title: "Figuring",
         author: "Maria Popova",
+        category: "Regular",
         chargePerDay: 1,
       },
     ],
@@ -35,6 +38,7 @@ describe("Book View test", () => {
     expect(getByText("Charge Per Day")).toBeInTheDocument();
 
     expect(getByText("Figuring")).toBeInTheDocument();
+    expect(getByText("$1")).toBeInTheDocument();
     expect(getByText("Maria Popova")).toBeInTheDocument();
   });
 

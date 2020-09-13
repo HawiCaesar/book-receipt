@@ -4,21 +4,24 @@ import { Customers } from "./connect";
 
 const store = {
   books: {
-    loadBooks: jest.fn(),
+    loadCustomers: jest.fn(),
     customers: [
       {
         id: 1,
         name: "Test customer 1",
-        booksRented: [1, 3],
+        booksRented: [
+          { id: 2, title: "Animal Farm", chargePerDay: 1.5 },
+          { id: 5, title: "Aminata", chargePerDay: 3 },
+        ],
         noOfDaysToRent: 5,
-        rentCharged: 10,
+        rentCharged: 20,
       },
       {
         id: 2,
         name: "Test customer 2",
-        booksRented: [2, 3],
+        booksRented: [{ id: 2, title: "Figuring", chargePerDay: 1 }],
         noOfDaysToRent: 2,
-        rentCharged: 4,
+        rentCharged: 2,
       },
     ],
     loading: false,
@@ -35,17 +38,22 @@ describe("Customers View test", () => {
     expect(getByText("No. of Books Rented")).toBeInTheDocument();
 
     expect(getByText("Test customer 1")).toBeInTheDocument();
-    expect(getByText(10)).toBeInTheDocument(); // rent charged
+    expect(getByText("Aminata @ $3")).toBeInTheDocument();
+    expect(getByText("Animal Farm @ $1.5")).toBeInTheDocument();
+    expect(getByText("$20")).toBeInTheDocument(); // total Rent
 
     expect(getByText("Test customer 2")).toBeInTheDocument();
-    expect(getByText(4)).toBeInTheDocument(); // rent charged
+    expect(getByText("Figuring @ $1")).toBeInTheDocument();
+    expect(getByText("$2")).toBeInTheDocument(); // total rent
   });
 
   it("should show me the loading text on the customer page", () => {
     const loadingStore = store;
     loadingStore.books.loading = true;
 
-    const { getByText } = reactTestingRender(<Customers store={loadingStore} />);
+    const { getByText } = reactTestingRender(
+      <Customers store={loadingStore} />
+    );
 
     expect(getByText("Loading...")).toBeInTheDocument();
   });

@@ -11,13 +11,13 @@ const store = {
         id: 1,
         title: "Pipers at the gates dawn",
         author: "Johnathan Cott",
-        chargePerDay: 1,
+        chargePerDay: 3,
       },
       {
         id: 2,
         title: "Figuring",
         author: "Maria Popova",
-        chargePerDay: 1,
+        chargePerDay: 1.5,
       },
     ],
     loading: false,
@@ -83,14 +83,24 @@ describe("Rental Charge View test", () => {
     fireEvent.click(firstBook);
     expect(firstBook.checked).toEqual(true);
 
+    // second book checked
+    const secondBook = getAllByTestId("booksRented-test")[1];
+    fireEvent.click(secondBook);
+    expect(secondBook.checked).toEqual(true);
+
     const submitDataButton = getByTestId("submit-rental-charge");
     fireEvent.click(submitDataButton);
 
     waitForElement(() => {
       // succesful
       expect(
-        getByText(`Jason Bourne's rental charge is $5`)
+        getByText(`Jason Bourne's rental charge is $22.5`)
       ).toBeInTheDocument();
+
+      expect(getByText(`Pipers at the gates dawn @ $15`)).toBeInTheDocument();
+
+      expect(getByText(`Figuring @ $7.5`)).toBeInTheDocument();
+
       expect(getByTestId("alert-message-green")).toBeInTheDocument();
       expect(store.books.postRentalCharge).toBeHaveBeenCalled();
     });
@@ -141,11 +151,9 @@ describe("Rental Charge View test", () => {
   });
 
   it("should show an alert when the customer has not picked a book", () => {
-    const {
-      getByText,
-      getByLabelText,
-      getByTestId,
-    } = reactTestingRender(<Rentals store={store} />);
+    const { getByText, getByLabelText, getByTestId } = reactTestingRender(
+      <Rentals store={store} />
+    );
 
     const inputCustomerName = getByLabelText("customer-name");
     fireEvent.change(inputCustomerName, { target: { value: "Allen Brown" } });
