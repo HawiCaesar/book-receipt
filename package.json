@@ -47,7 +47,6 @@
     "postcss-normalize": "8.0.1",
     "postcss-preset-env": "6.7.0",
     "postcss-safe-parser": "4.0.1",
-    "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-app-polyfill": "^1.0.6",
     "react-dev-utils": "^10.2.1",
@@ -73,7 +72,8 @@
     "prebuild": "npm run build:tailwind",
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js"
+    "test": "CI=true node scripts/test.js",
+    "report-coverage": "cat ./coverage/lcov.info | coveralls"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -155,6 +155,7 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-decorators": "^7.10.5",
-    "@testing-library/react": "^9.5.0"
+    "@testing-library/react": "^9.5.0",
+    "coveralls": "^3.1.0"
   }
 }

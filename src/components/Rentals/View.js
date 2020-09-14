@@ -79,6 +79,7 @@ class Rentals extends React.Component {
                   totalPay={totalPay}
                   name={values.name}
                   booksRented={particulars}
+                  noOfDays={values.noOfDaysToRent}
                 />,
                 "Save Successful",
                 "success"
@@ -86,7 +87,7 @@ class Rentals extends React.Component {
               toggleAlert(true);
 
               setTimeout(() => {
-                resetForm({});
+                //resetForm({});
                 toggleAlert(false);
               }, 10000);
             } catch (error) {
@@ -188,9 +189,8 @@ class Rentals extends React.Component {
                               <tr key={book.id}>
                                 <td className="border px-4 py-2">
                                   <label className="flex justify-start items-start">
-                                    <div className="bg-white border-2 rounded border-gray-400 w-6 h-6 flex flex-shrink-0 justify-center items-center mr-2 focus-within:border-blue-500">
+                                    <div className="bg-white w-6 h-6 flex flex-shrink-0 justify-center items-center mr-2 focus-within:border-blue-500">
                                       <Field
-                                        className="opacity-0 absolute"
                                         name={`booksRented[${index}].id`}
                                         data-testid={`booksRented-test`}
                                         type="checkbox"
@@ -209,12 +209,6 @@ class Rentals extends React.Component {
                                           }
                                         }}
                                       />
-                                      <svg
-                                        className="fill-current hidden w-4 h-4 text-green-500 pointer-events-none"
-                                        viewBox="0 0 20 20"
-                                      >
-                                        <path d="M0 11l2-2 5 5L18 3l2 2L7 18z" />
-                                      </svg>
                                     </div>
                                     <div className="select-none">
                                       {book.title}
@@ -225,7 +219,24 @@ class Rentals extends React.Component {
                                   {book.category}
                                 </td>
                                 <td className="border px-4 py-2">
-                                  ${book.chargePerDay}
+                                  {book.category === "Regular" ||
+                                  book.category === "Novel" ? (
+                                    <React.Fragment>
+                                      <p className="pt-2 font-semibold">
+                                        At least 1 day @ ${book.day1Charge}
+                                      </p>
+
+                                      <p className="pt-2 font-semibold">
+                                        First 2 days @ ${book.day2Charge}
+                                      </p>
+
+                                      <p className="pt-2 font-semibold">
+                                        3 days and over @ ${book.chargePerDay}
+                                      </p>
+                                    </React.Fragment>
+                                  ) : (
+                                    `$${book.chargePerDay}`
+                                  )}
                                 </td>
                               </tr>
                             ))}

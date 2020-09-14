@@ -11,13 +11,26 @@ const store = {
         id: 1,
         title: "Pipers at the gates dawn",
         author: "Johnathan Cott",
-        chargePerDay: 3,
+        category: "Novel",
+        chargePerDay: 1.5,
+        day1Charge: 4.5,
+        day2Charge: 4.5,
       },
       {
         id: 2,
         title: "Figuring",
         author: "Maria Popova",
         chargePerDay: 1.5,
+        category: "Regular",
+        day1Charge: 2,
+        day2Charge: 1,
+      },
+      {
+        id: 3,
+        title: "Animal Farm",
+        author: "George Orwell",
+        chargePerDay: 3,
+        category: "Fiction",
       },
     ],
     loading: false,
@@ -59,7 +72,7 @@ describe("Rental Charge View test", () => {
     expect(getByText("Number of days renting")).toBeInTheDocument();
     expect(getByText("Available Books")).toBeInTheDocument();
 
-    expect(getAllByTestId("booksRented-test").length).toEqual(2);
+    expect(getAllByTestId("booksRented-test").length).toEqual(3);
   });
 
   it("should allow the user to add a customers rental charge", () => {
@@ -83,8 +96,8 @@ describe("Rental Charge View test", () => {
     fireEvent.click(firstBook);
     expect(firstBook.checked).toEqual(true);
 
-    // second book checked
-    const secondBook = getAllByTestId("booksRented-test")[1];
+    // third book checked
+    const secondBook = getAllByTestId("booksRented-test")[2];
     fireEvent.click(secondBook);
     expect(secondBook.checked).toEqual(true);
 
@@ -94,12 +107,15 @@ describe("Rental Charge View test", () => {
     waitForElement(() => {
       // succesful
       expect(
-        getByText(`Jason Bourne's rental charge is $22.5`)
+        getByText(`Jason Bourne's Total rental charge is is $28.5 for 5 days`)
       ).toBeInTheDocument();
 
-      expect(getByText(`Pipers at the gates dawn @ $15`)).toBeInTheDocument();
+      expect(getByText(`Pipers at the gates dawn`)).toBeInTheDocument();
+      expect(getByText("At least 1 day @ $4.5")).toBeInTheDocument();
+      expect(getByText("First 2 days @ $4.5")).toBeInTheDocument();
+      expect(getByText("3 days and over @ $1.5")).toBeInTheDocument();
 
-      expect(getByText(`Figuring @ $7.5`)).toBeInTheDocument();
+      expect(getByText(`Animal Farm @ $3, totalling $15`)).toBeInTheDocument();
 
       expect(getByTestId("alert-message-green")).toBeInTheDocument();
       expect(store.books.postRentalCharge).toBeHaveBeenCalled();
