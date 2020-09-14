@@ -1,0 +1,15 @@
+sudo: false
+language: node_js
+node_js:
+  - "12"
+
+cache:
+  directories:
+    - node_modules
+
+env:
+  - NODE_PATH=src/utils
+
+script:
+  - "npm test -- --coverage && ./node_modules/coveralls/bin/coveralls.js < coverage/lcov.info"
+  - "npm report-coverage"
