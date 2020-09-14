@@ -12,4 +12,6 @@ env:
 
 script:
   - "npm test -- --coverage && ./node_modules/coveralls/bin/coveralls.js < coverage/lcov.info"
+
+after_success:
   - "npm report-coverage"
